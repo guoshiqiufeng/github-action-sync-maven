@@ -33,13 +33,20 @@ export async function run(): Promise<void> {
     core.debug(`mvn check ${check} `)
 
     for (const dependency of dependencies) {
-      const result = await exec.exec('mvn dependency:get', [
-        `-DremoteRepositories=${repositories}`,
-        `-DgroupId=${dependency.groupId}`,
-        `-DartifactId=${dependency.artifactId}`,
-        `-Dversion=${dependency.version}`
-      ])
-      core.debug(`mvn dependency:get ${result} `)
+      try {
+        const result = await exec.exec('mvn dependency:get', [
+          `-DremoteRepositories=${repositories}`,
+          `-DgroupId=${dependency.groupId}`,
+          `-DartifactId=${dependency.artifactId}`,
+          `-Dversion=${dependency.version}`
+        ])
+        core.debug(`mvn dependency:get ${result} `)
+      } catch (error) {
+        core.error(`mvn dependency:get error ${error} `)
+        core.setFailed(
+          `Failed to get dependency: ${dependency.groupId}:${dependency.artifactId}:${dependency.version}`
+        )
+      }
     }
 
     core.setOutput('time', check)
