@@ -1,7 +1,7 @@
 {
   "name": "github-action-async-maven",
   "description": "Synchronize Maven Dependencies",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "",
   "private": true,
   "homepage": "https://github.com/guoshiqiufeng/github-action-async-maven",
