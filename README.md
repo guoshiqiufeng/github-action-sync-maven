@@ -29,7 +29,6 @@ This Action is used to synchronize dependencies to maven repositories.
      build:
        runs-on: ubuntu-latest
        steps:
-         - uses: actions/checkout@v2
          - name: Set up Maven
            uses: stCarolas/setup-maven@v4.5
            with:
