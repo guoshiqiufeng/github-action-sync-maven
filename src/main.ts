@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import { Dependency } from './type'
+import { initSettings } from './pom'
 
 /**
  * The main function for the action.
@@ -32,10 +33,14 @@ export async function run(): Promise<void> {
     const check = await exec.exec('mvn -version')
     core.debug(`mvn check ${check} `)
 
+    // init settings
+    await initSettings(repositories)
+    // await exec.exec('cat pom.xml')
+    // await exec.exec('mvn dependency:list-repositories')
     for (const dependency of dependencies) {
       try {
         const result = await exec.exec('mvn dependency:get', [
-          `-DremoteRepositories=${repositories}`,
+          // `-DremoteRepositories=central::default::${repositories}`,
           `-DgroupId=${dependency.groupId}`,
           `-DartifactId=${dependency.artifactId}`,
           `-Dversion=${dependency.version}`

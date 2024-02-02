@@ -11,7 +11,24 @@ jobs:
       - name: Set up Maven
         uses: stCarolas/setup-maven@v4.5
         with:
-          maven-version: 3.9.5
+          maven-version: 3.8.2
+#      - name: env
+#        run: |
+#          mkdir ~/.m2
+#          echo '<?xml version="1.0" encoding="UTF-8"?><settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+#          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+#          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+#          <mirrors><mirror><id>maven</id><name>maven</name>
+#          <url>https://repo1.maven.org/maven2/</url>
+#          <mirrorOf>central</mirrorOf></mirror></mirrors>
+#          </settings>' > ~/.m2/settings.xml
       - uses: ./
         with:
-          dependenciesJson: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.8.1"},{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki-spring-boot-starter", "version":"0.8.1"}]'
+          dependenciesJson: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki-spring-boot-starter", "version":"0.8.1"}]'
+      - name: cat
+        run: |
+          ls -a
+        # cat ~/.m2/settings.xml
+
+
+

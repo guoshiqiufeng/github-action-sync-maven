@@ -3985,6 +3985,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const exec = __importStar(__nccwpck_require__(514));
+const pom_1 = __nccwpck_require__(181);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -4007,10 +4008,14 @@ async function run() {
         core.debug(`repositories ${dependencies} `);
         const check = await exec.exec('mvn -version');
         core.debug(`mvn check ${check} `);
+        // init settings
+        await (0, pom_1.initSettings)(repositories);
+        // await exec.exec('cat pom.xml')
+        // await exec.exec('mvn dependency:list-repositories')
         for (const dependency of dependencies) {
             try {
                 const result = await exec.exec('mvn dependency:get', [
-                    `-DremoteRepositories=${repositories}`,
+                    // `-DremoteRepositories=central::default::${repositories}`,
                     `-DgroupId=${dependency.groupId}`,
                     `-DartifactId=${dependency.artifactId}`,
                     `-Dversion=${dependency.version}`
@@ -4031,6 +4036,71 @@ async function run() {
     }
 }
 exports.run = run;
+
+
+/***/ }),
+
+/***/ 181:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.initSettings = void 0;
+const fs = __importStar(__nccwpck_require__(147));
+const os = __importStar(__nccwpck_require__(37));
+async function initSettings(repositories) {
+    if (isEmpty(repositories)) {
+        throw new Error('repositories is empty');
+    }
+    const xml = getXml(repositories);
+    const m2Directory = `${os.homedir()}/.m2`;
+    fs.mkdirSync(m2Directory, { recursive: true });
+    fs.writeFileSync(`${m2Directory}/settings.xml`, xml);
+    return 'done!';
+}
+exports.initSettings = initSettings;
+function isEmpty(repositories) {
+    return (repositories === null || repositories === undefined || repositories === '');
+}
+function getXml(repositories) {
+    return `<?xml version="1.0" encoding="UTF-8"?>
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+      <mirrors>
+        <mirror>
+          <id>maven</id>
+          <name>maven</name>
+          <url>${repositories}</url>
+          <mirrorOf>central</mirrorOf>
+        </mirror>
+      </mirrors>
+    </settings>`;
+}
 
 
 /***/ }),

@@ -1,5 +1,5 @@
 {
-  "name": "github-action-async-maven",
+  "name": "github-action-sync-maven",
   "description": "Synchronize Maven Dependencies",
   "version": "1.0.0",
   "author": "",
@@ -15,7 +15,7 @@
   "keywords": [
     "actions",
     "maven",
-    "async maven"
+    "sync maven"
   ],
   "exports": {
     ".": "./dist/index.js"
