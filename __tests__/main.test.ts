@@ -1,64 +1,77 @@
-/**
- * Unit tests for the action's main functionality, src/main.ts
- *
- * These should be run as if the action was called from a workflow.
- * Specifically, the inputs listed in `action.yml` should be set as environment
- * variables following the pattern `INPUT_<INPUT_NAME>`.
- */
-
 import * as core from '@actions/core'
+import * as exec from '@actions/exec'
 import * as main from '../src/main'
-
-// Mock the action's main function
-const runMock = jest.spyOn(main, 'run')
 
 // Mock the GitHub Actions core library
 let debugMock: jest.SpyInstance
-let errorMock: jest.SpyInstance
 let getInputMock: jest.SpyInstance
-// let setFailedMock: jest.SpyInstance
-// let setOutputMock: jest.SpyInstance
+let execMock: jest.SpyInstance
 
 describe('action', () => {
   beforeEach(() => {
     jest.clearAllMocks()
 
     debugMock = jest.spyOn(core, 'debug').mockImplementation()
-    errorMock = jest.spyOn(core, 'error').mockImplementation()
     getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
-    // setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-    // setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+    execMock = jest.spyOn(exec, 'exec').mockImplementation()
   })
 
-  it('sets the time output', async () => {
+  it('runs the action with valid inputs', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
+        case 'repositories':
+          return 'your-repo-url'
+        case 'dependenciesJson':
+          return '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.8.1"}]'
         default:
           return ''
       }
     })
 
-    await main.run()
-    expect(runMock).toHaveReturned()
-    expect(debugMock).toHaveReturned()
-    // expect(setOutputMock).toHaveReturned()
+    // Mock the Maven version check
+    execMock.mockResolvedValue(0)
 
-    expect(errorMock).not.toHaveBeenCalled()
+    // Mock Maven dependency:get execution
+    execMock.mockResolvedValueOnce(0)
+
+    await main.run()
+
+    expect(debugMock).toHaveBeenCalledWith('repositories your-repo-url ')
+    expect(debugMock).toHaveBeenCalledWith(
+      'dependenciesJson [{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.8.1"}] '
+    )
+
+    expect(execMock).toHaveBeenCalledWith('mvn -version')
   })
 
-  it('sets a failed status', async () => {
+  it('handles an error during execution', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
+        case 'repositories':
+          return 'your-repo-url'
+        case 'dependenciesJson':
+          return '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.8.1"}]'
         default:
           return ''
       }
     })
 
-    await main.run()
-    expect(runMock).toHaveReturned()
+    // Mock the Maven version check
+    execMock.mockResolvedValue(0)
 
-    expect(errorMock).not.toHaveBeenCalled()
+    // Mock an error during Maven dependency:get execution
+    execMock.mockRejectedValueOnce(new Error('Failed to get dependency'))
+
+    await main.run()
+
+    expect(debugMock).toHaveBeenCalledWith('repositories your-repo-url ')
+    expect(debugMock).toHaveBeenCalledWith(
+      'dependenciesJson [{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.8.1"}] '
+    )
+    expect(debugMock).toHaveBeenCalledWith('repositories [object Object] ')
+
+    expect(execMock).toHaveBeenCalledWith('mvn -version')
   })
 })

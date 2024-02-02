@@ -13,3 +13,5 @@ jobs:
         with:
           maven-version: 3.9.5
       - uses: ./
+        with:
+          dependenciesJson: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.8.1"},{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki-spring-boot-starter", "version":"0.8.1"}]'

@@ -16,7 +16,7 @@ inputs:
   dependenciesJson:
     description: 'List of dependencies to sync'
     required: true
-    default: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.9.0"}]'
+    default: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.8.1"}]'
 
 # Define your outputs here.
 outputs:
