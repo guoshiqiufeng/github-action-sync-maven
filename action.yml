@@ -1,6 +1,6 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Sync Maven'
+description: 'Synchronize Maven Dependencies'
+author: 'yanghq'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
@@ -9,15 +9,19 @@ branding:
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  repositories:
+    description: 'Repository URL'
     required: true
-    default: '1000'
+    default: 'https://repo1.maven.org/maven2/'
+  dependenciesJson:
+    description: 'List of dependencies to sync'
+    required: true
+    default: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.9.0"}]'
 
 # Define your outputs here.
 outputs:
   time:
-    description: 'Your output description here'
+    description: 'Time of the sync'
 
 runs:
   using: node20

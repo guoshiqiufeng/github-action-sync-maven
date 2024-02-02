@@ -1,21 +1,21 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
-  "version": "0.0.0",
+  "name": "github-action-async-maven",
+  "description": "Synchronize Maven Dependencies",
+  "version": "0.1.0",
   "author": "",
   "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "homepage": "https://github.com/guoshiqiufeng/github-action-async-maven",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/guoshiqiufeng/github-action-async-maven.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/guoshiqiufeng/github-action-async-maven/issues"
   },
   "keywords": [
     "actions",
-    "node",
-    "setup"
+    "maven",
+    "async maven"
   ],
   "exports": {
     ".": "./dist/index.js"
@@ -66,7 +66,8 @@
     ]
   },
   "dependencies": {
-    "@actions/core": "^1.10.1"
+    "@actions/core": "^1.10.1",
+    "@actions/exec": "^1.1.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.11",
