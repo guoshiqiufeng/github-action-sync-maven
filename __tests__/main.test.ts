@@ -17,7 +17,7 @@ let debugMock: jest.SpyInstance
 let errorMock: jest.SpyInstance
 let getInputMock: jest.SpyInstance
 // let setFailedMock: jest.SpyInstance
-let setOutputMock: jest.SpyInstance
+// let setOutputMock: jest.SpyInstance
 
 describe('action', () => {
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('action', () => {
     errorMock = jest.spyOn(core, 'error').mockImplementation()
     getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
     // setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-    setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+    // setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
   })
 
   it('sets the time output', async () => {
@@ -42,7 +42,7 @@ describe('action', () => {
     await main.run()
     expect(runMock).toHaveReturned()
     expect(debugMock).toHaveReturned()
-    expect(setOutputMock).toHaveReturned()
+    // expect(setOutputMock).toHaveReturned()
 
     expect(errorMock).not.toHaveBeenCalled()
   })

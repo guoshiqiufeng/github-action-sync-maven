@@ -1,4 +1,6 @@
 import * as core from '@actions/core'
+import * as exec from '@actions/exec'
+import { Dependency } from './type'
 
 /**
  * The main function for the action.
@@ -13,10 +15,34 @@ export async function run(): Promise<void> {
     core.debug(`repositories ${repositories} `)
     core.debug(`dependenciesJson ${dependenciesJson} `)
 
-    // Log the current timestamp, wait, then log the new timestamp
+    // 解析 JSON 字符串
+    const jsonArray: {
+      groupId: string
+      artifactId: string
+      version: string
+    }[] = JSON.parse(dependenciesJson)
 
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    // 将 JSON 对象数组转换为 TypeScript 对象数组
+    const dependencies: Dependency[] = jsonArray.map(item => ({
+      groupId: item.groupId,
+      artifactId: item.artifactId,
+      version: item.version
+    }))
+    core.debug(`repositories ${dependencies} `)
+    const check = await exec.exec('mvn -version')
+    core.debug(`mvn check ${check} `)
+
+    for (const dependency of dependencies) {
+      const result = await exec.exec('mvn dependency:get', [
+        `-DremoteRepositories=${repositories}`,
+        `-DgroupId=${dependency.groupId}`,
+        `-DartifactId=${dependency.artifactId}`,
+        `-Dversion=${dependency.version}`
+      ])
+      core.debug(`mvn dependency:get ${result} `)
+    }
+
+    core.setOutput('time', check)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
