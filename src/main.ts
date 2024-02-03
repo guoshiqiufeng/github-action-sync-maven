@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import { Dependency } from './type'
 import { initSettings } from './setting'
+import { initDependency } from './dependency'
 
 /**
  * The main function for the action.
@@ -36,7 +37,8 @@ export async function run(): Promise<void> {
     core.debug(`repositories ${dependencies} `)
     const check = await exec.exec('mvn -version')
     core.debug(`mvn check ${check} `)
-
+    // init dependency
+    await initDependency(repositories)
     // init settings
     await initSettings(repositories)
     // await exec.exec('cat pom.xml')
