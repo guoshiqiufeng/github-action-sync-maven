@@ -8,16 +8,16 @@ export async function initDependency(repositories: string): Promise<string> {
   if (value) {
     return value
   }
-  const xml: string = getXml()
+  const m2Directory = `${os.homedir()}/.m2`
+  const xml: string = getXml(m2Directory)
   fs.writeFileSync(`pom.xml`, xml)
   await exec.exec('mvn dependency:tree')
-  const m2Directory = `${os.homedir()}/.m2`
   await tc.cacheDir(m2Directory, 'maven-dependency', repositories)
-  await exec.exec('rm -rf pom.xml')
+  //await exec.exec('rm -rf pom.xml')
   return 'done!'
 }
 
-function getXml(): string {
+function getXml(m2Directory: string): string {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -25,5 +25,11 @@ function getXml(): string {
     <artifactId>github-action-sync-maven</artifactId>
     <groupId>io.github.guoshiqiufeng</groupId>
     <version>1.0.0</version>
+    <repositories>
+        <repository>
+            <id>local-repo</id>
+            <url>file://${m2Directory}/repository</url>
+        </repository>
+    </repositories>
 </project>`
 }
