@@ -39,6 +39,7 @@ export async function run(): Promise<void> {
     core.debug(`mvn check ${check} `)
     // init dependency
     await initDependency(repositories)
+    await exec.exec('cat pom.xml')
     // init settings
     await initSettings(repositories)
     // await exec.exec('cat pom.xml')

@@ -5,12 +5,12 @@ import os from 'os'
 
 export async function initDependency(repositories: string): Promise<string> {
   const value = tc.find('maven-dependency', repositories)
-  if (value) {
-    return value
-  }
   const m2Directory = `${os.homedir()}/.m2`
   const xml: string = getXml(m2Directory)
   fs.writeFileSync(`pom.xml`, xml)
+  if (value) {
+    return value
+  }
   await exec.exec('mvn dependency:tree')
   await tc.cacheDir(m2Directory, 'maven-dependency', repositories)
   //await exec.exec('rm -rf pom.xml')
