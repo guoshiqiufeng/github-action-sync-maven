@@ -24,7 +24,7 @@ jobs:
 #          </settings>' > ~/.m2/settings.xml
       - uses: ./
         with:
-          repositories: 'https://repo1.maven.org/maven2/'
+          repositories: 'https://repo.maven.apache.org/maven2/'
           dependenciesJson: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.8.1", "transitive": false}]'
 
 
