@@ -25,10 +25,6 @@ jobs:
       - uses: ./
         with:
           dependenciesJson: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki-spring-boot-starter", "version":"0.8.1"}]'
-      - name: cat
-        run: |
-          ls -a
-        # cat ~/.m2/settings.xml
 
 
 
