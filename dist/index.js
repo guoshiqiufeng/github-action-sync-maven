@@ -6623,12 +6623,12 @@ const tc = __importStar(__nccwpck_require__(7784));
 const os_1 = __importDefault(__nccwpck_require__(2037));
 async function initDependency(repositories) {
     const value = tc.find('maven-dependency', repositories);
-    if (value) {
-        return value;
-    }
     const m2Directory = `${os_1.default.homedir()}/.m2`;
     const xml = getXml(m2Directory);
     fs.writeFileSync(`pom.xml`, xml);
+    if (value) {
+        return value;
+    }
     await exec.exec('mvn dependency:tree');
     await tc.cacheDir(m2Directory, 'maven-dependency', repositories);
     //await exec.exec('rm -rf pom.xml')
@@ -6715,6 +6715,7 @@ async function run() {
         core.debug(`mvn check ${check} `);
         // init dependency
         await (0, dependency_1.initDependency)(repositories);
+        await exec.exec('cat pom.xml');
         // init settings
         await (0, setting_1.initSettings)(repositories);
         // await exec.exec('cat pom.xml')
