@@ -38,8 +38,9 @@ export async function run(): Promise<void> {
     const check = await exec.exec('mvn -version')
     core.debug(`mvn check ${check} `)
     // init dependency
+    await initSettings('https://repo1.maven.org/maven2/')
+
     await initDependency(repositories)
-    await exec.exec('cat pom.xml')
     // init settings
     await initSettings(repositories)
     // await exec.exec('cat pom.xml')

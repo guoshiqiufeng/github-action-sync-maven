@@ -6623,19 +6623,19 @@ const tc = __importStar(__nccwpck_require__(7784));
 const os_1 = __importDefault(__nccwpck_require__(2037));
 async function initDependency(repositories) {
     const value = tc.find('maven-dependency', repositories);
-    const m2Directory = `${os_1.default.homedir()}/.m2`;
-    const xml = getXml(m2Directory);
-    fs.writeFileSync(`pom.xml`, xml);
     if (value) {
         return value;
     }
+    const m2Directory = `${os_1.default.homedir()}/.m2`;
+    const xml = getXml();
+    fs.writeFileSync(`pom.xml`, xml);
     await exec.exec('mvn dependency:tree');
     await tc.cacheDir(m2Directory, 'maven-dependency', repositories);
     //await exec.exec('rm -rf pom.xml')
     return 'done!';
 }
 exports.initDependency = initDependency;
-function getXml(m2Directory) {
+function getXml() {
     return `<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -6643,12 +6643,6 @@ function getXml(m2Directory) {
     <artifactId>github-action-sync-maven</artifactId>
     <groupId>io.github.guoshiqiufeng</groupId>
     <version>1.0.0</version>
-    <repositories>
-        <repository>
-            <id>local-repo</id>
-            <url>file://${m2Directory}/repository</url>
-        </repository>
-    </repositories>
 </project>`;
 }
 
@@ -6714,8 +6708,8 @@ async function run() {
         const check = await exec.exec('mvn -version');
         core.debug(`mvn check ${check} `);
         // init dependency
+        await (0, setting_1.initSettings)('https://repo1.maven.org/maven2/');
         await (0, dependency_1.initDependency)(repositories);
-        await exec.exec('cat pom.xml');
         // init settings
         await (0, setting_1.initSettings)(repositories);
         // await exec.exec('cat pom.xml')
