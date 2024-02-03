@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import * as exec from '@actions/exec'
 import * as tc from '@actions/tool-cache'
+import os from 'os'
 
 export async function initDependency(repositories: string): Promise<string> {
   const value = tc.find('maven-dependency', repositories)
@@ -10,7 +11,8 @@ export async function initDependency(repositories: string): Promise<string> {
   const xml: string = getXml()
   fs.writeFileSync(`pom.xml`, xml)
   await exec.exec('mvn dependency:tree')
-  await tc.cacheDir('~/.m2', 'maven-dependency', repositories)
+  const m2Directory = `${os.homedir()}/.m2`
+  await tc.cacheDir(m2Directory, 'maven-dependency', repositories)
   await exec.exec('rm -rf pom.xml')
   return 'done!'
 }
