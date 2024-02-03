@@ -4004,7 +4004,8 @@ async function run() {
             groupId: item.groupId,
             artifactId: item.artifactId,
             version: item.version,
-            packaging: item.packaging ? item.packaging : 'jar'
+            packaging: item.packaging ? item.packaging : 'jar',
+            transitive: item.transitive ? item.transitive : true
         }));
         core.debug(`repositories ${dependencies} `);
         const check = await exec.exec('mvn -version');
@@ -4020,7 +4021,8 @@ async function run() {
                     `-DgroupId=${dependency.groupId}`,
                     `-DartifactId=${dependency.artifactId}`,
                     `-Dversion=${dependency.version}`,
-                    `-Dpackaging=${dependency.packaging}`
+                    `-Dpackaging=${dependency.packaging}`,
+                    `-Dtransitive=${dependency.transitive}`
                 ]);
                 core.debug(`mvn dependency:get ${result} `);
             }

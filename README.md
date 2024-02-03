@@ -16,9 +16,12 @@ This Action is used to synchronize dependencies to maven repositories.
     - groupId **Required**
     - artifactId **Required**
     - version **Required**
-    - packaging  **Required**
+    - packaging  
       - default value: `jar`
       - Optional values：`jar` 、`pom`
+    - transitive 
+      - default value: `true`
+      - Optional values：`true` 、`false`
 
 ## Use the Action
 

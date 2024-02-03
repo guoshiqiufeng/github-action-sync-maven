@@ -3,4 +3,5 @@ export interface Dependency {
   artifactId: string
   version: string
   packaging?: string
+  transitive?: boolean
 }

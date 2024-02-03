@@ -22,6 +22,7 @@ export async function run(): Promise<void> {
       artifactId: string
       version: string
       packaging?: string
+      transitive?: boolean
     }[] = JSON.parse(dependenciesJson)
 
     // 将 JSON 对象数组转换为 TypeScript 对象数组
@@ -29,7 +30,8 @@ export async function run(): Promise<void> {
       groupId: item.groupId,
       artifactId: item.artifactId,
       version: item.version,
-      packaging: item.packaging ? item.packaging : 'jar'
+      packaging: item.packaging ? item.packaging : 'jar',
+      transitive: item.transitive ? item.transitive : true
     }))
     core.debug(`repositories ${dependencies} `)
     const check = await exec.exec('mvn -version')
@@ -46,7 +48,8 @@ export async function run(): Promise<void> {
           `-DgroupId=${dependency.groupId}`,
           `-DartifactId=${dependency.artifactId}`,
           `-Dversion=${dependency.version}`,
-          `-Dpackaging=${dependency.packaging}`
+          `-Dpackaging=${dependency.packaging}`,
+          `-Dtransitive=${dependency.transitive}`
         ])
         core.debug(`mvn dependency:get ${result} `)
       } catch (error) {
