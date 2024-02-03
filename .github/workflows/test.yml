@@ -24,7 +24,6 @@ jobs:
 #          </settings>' > ~/.m2/settings.xml
       - uses: ./
         with:
-          repositories: 'https://maven.aliyun.com/repository/public/'
           dependenciesJson: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki", "version":"0.8.1", "packaging": "pom", "transitive": false}]'
 
 
