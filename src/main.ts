@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import { Dependency } from './type'
-import { initSettings } from './pom'
+import { initSettings } from './setting'
 
 /**
  * The main function for the action.
@@ -21,13 +21,15 @@ export async function run(): Promise<void> {
       groupId: string
       artifactId: string
       version: string
+      packaging?: string
     }[] = JSON.parse(dependenciesJson)
 
     // 将 JSON 对象数组转换为 TypeScript 对象数组
     const dependencies: Dependency[] = jsonArray.map(item => ({
       groupId: item.groupId,
       artifactId: item.artifactId,
-      version: item.version
+      version: item.version,
+      packaging: item.packaging ? item.packaging : 'jar'
     }))
     core.debug(`repositories ${dependencies} `)
     const check = await exec.exec('mvn -version')
@@ -43,7 +45,8 @@ export async function run(): Promise<void> {
           // `-DremoteRepositories=central::default::${repositories}`,
           `-DgroupId=${dependency.groupId}`,
           `-DartifactId=${dependency.artifactId}`,
-          `-Dversion=${dependency.version}`
+          `-Dversion=${dependency.version}`,
+          `-Dpackaging=${dependency.packaging}`
         ])
         core.debug(`mvn dependency:get ${result} `)
       } catch (error) {

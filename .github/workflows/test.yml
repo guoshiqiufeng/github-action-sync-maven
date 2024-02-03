@@ -24,7 +24,7 @@ jobs:
 #          </settings>' > ~/.m2/settings.xml
       - uses: ./
         with:
-          dependenciesJson: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki-spring-boot-starter", "version":"0.8.1"}]'
+          dependenciesJson: '[{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki-bom", "version":"0.8.1", "packaging": "pom"},{"groupId":"io.github.guoshiqiufeng", "artifactId":"loki-spring-boot-starter", "version":"0.8.1"}]'
 
 
 

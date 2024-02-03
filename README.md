@@ -13,9 +13,12 @@ This Action is used to synchronize dependencies to maven repositories.
 - `dependenciesJson`
   - **Required**. The dependencies to synchronize. Is a configured json array.
   - json format
-    - groupId
-    - artifactId
-    - version
+    - groupId **Required**
+    - artifactId **Required**
+    - version **Required**
+    - packaging  **Required**
+      - default value: `jar`
+      - Optional values：`jar` 、`pom`
 
 ## Use the Action
 

@@ -3985,7 +3985,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const exec = __importStar(__nccwpck_require__(514));
-const pom_1 = __nccwpck_require__(181);
+const setting_1 = __nccwpck_require__(874);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -4003,13 +4003,14 @@ async function run() {
         const dependencies = jsonArray.map(item => ({
             groupId: item.groupId,
             artifactId: item.artifactId,
-            version: item.version
+            version: item.version,
+            packaging: item.packaging ? item.packaging : 'jar'
         }));
         core.debug(`repositories ${dependencies} `);
         const check = await exec.exec('mvn -version');
         core.debug(`mvn check ${check} `);
         // init settings
-        await (0, pom_1.initSettings)(repositories);
+        await (0, setting_1.initSettings)(repositories);
         // await exec.exec('cat pom.xml')
         // await exec.exec('mvn dependency:list-repositories')
         for (const dependency of dependencies) {
@@ -4018,7 +4019,8 @@ async function run() {
                     // `-DremoteRepositories=central::default::${repositories}`,
                     `-DgroupId=${dependency.groupId}`,
                     `-DartifactId=${dependency.artifactId}`,
-                    `-Dversion=${dependency.version}`
+                    `-Dversion=${dependency.version}`,
+                    `-Dpackaging=${dependency.packaging}`
                 ]);
                 core.debug(`mvn dependency:get ${result} `);
             }
@@ -4040,7 +4042,7 @@ exports.run = run;
 
 /***/ }),
 
-/***/ 181:
+/***/ 874:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
