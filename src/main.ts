@@ -31,7 +31,7 @@ export async function run(): Promise<void> {
       artifactId: item.artifactId,
       version: item.version,
       packaging: item.packaging ? item.packaging : 'jar',
-      transitive: item.transitive ? item.transitive : true
+      transitive: item.transitive != null ? item.transitive : true
     }))
     core.debug(`repositories ${dependencies} `)
     const check = await exec.exec('mvn -version')
