@@ -6616,7 +6616,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.initDependency = void 0;
+exports.getXml = exports.initDependency = void 0;
 const fs = __importStar(__nccwpck_require__(7147));
 const exec = __importStar(__nccwpck_require__(1514));
 const tc = __importStar(__nccwpck_require__(7784));
@@ -6645,6 +6645,7 @@ function getXml() {
     <version>1.0.0</version>
 </project>`;
 }
+exports.getXml = getXml;
 
 
 /***/ }),

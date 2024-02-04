@@ -32,6 +32,8 @@ describe('dependency', () => {
     // Check if find function is called with the correct parameters
     expect(findMock).toHaveBeenCalledWith('maven-dependency', repositories)
 
+    dependency.getXml()
+
     // Check if getXml function is called
     expect(getXmlMock).toHaveBeenCalled()
 
